@@ -1,0 +1,417 @@
+[
+    {
+        "id": "6806bff36aacc4c5",
+        "type": "tab",
+        "label": "Flow 1 - Full",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "aa464451a09e4b65",
+        "type": "mqtt in",
+        "z": "6806bff36aacc4c5",
+        "name": "Nhiệt độ",
+        "topic": "adminpc/tuoicay/nhietdo",
+        "qos": "0",
+        "datatype": "auto",
+        "broker": "328e8059b356b807",
+        "nl": false,
+        "rap": false,
+        "inputs": 0,
+        "x": 450,
+        "y": 240,
+        "wires": [
+            [
+                "c0a9e9bd7d53c052",
+                "8d80a65693e21c0e"
+            ]
+        ]
+    },
+    {
+        "id": "876fc7353857b873",
+        "type": "mqtt in",
+        "z": "6806bff36aacc4c5",
+        "name": "Độ ẩm",
+        "topic": "adminpc/tuoicay/doam",
+        "qos": "0",
+        "datatype": "auto",
+        "broker": "328e8059b356b807",
+        "nl": false,
+        "rap": false,
+        "inputs": 0,
+        "x": 450,
+        "y": 300,
+        "wires": [
+            [
+                "82967dfc6be2a757",
+                "8d80a65693e21c0e"
+            ]
+        ]
+    },
+    {
+        "id": "e32ee1d58af08121",
+        "type": "mqtt in",
+        "z": "6806bff36aacc4c5",
+        "name": "Độ ẩm Đất",
+        "topic": "adminpc/tuoicay/doamdat",
+        "qos": "0",
+        "datatype": "auto",
+        "broker": "328e8059b356b807",
+        "nl": false,
+        "rap": false,
+        "inputs": 0,
+        "x": 450,
+        "y": 360,
+        "wires": [
+            [
+                "5c0beede8a38f194"
+            ]
+        ]
+    },
+    {
+        "id": "c0a9e9bd7d53c052",
+        "type": "ui_gauge",
+        "z": "6806bff36aacc4c5",
+        "name": "",
+        "group": "dash_group_1",
+        "order": 1,
+        "width": "",
+        "height": "",
+        "gtype": "gage",
+        "title": "Nhiệt độ (°C)",
+        "label": "°C",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "60",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 670,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "82967dfc6be2a757",
+        "type": "ui_gauge",
+        "z": "6806bff36aacc4c5",
+        "name": "",
+        "group": "dash_group_1",
+        "order": 2,
+        "title": "Độ ẩm KK (%)",
+        "label": "%",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "100",
+        "colors": [
+            "#ca3838",
+            "#e6e600",
+            "#00b500"
+        ],
+        "x": 670,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "5c0beede8a38f194",
+        "type": "ui_gauge",
+        "z": "6806bff36aacc4c5",
+        "name": "",
+        "group": "dash_group_1",
+        "order": 3,
+        "title": "Độ ẩm Đất (%)",
+        "label": "%",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "100",
+        "colors": [
+            "#ca3838",
+            "#e6e600",
+            "#00b500"
+        ],
+        "x": 670,
+        "y": 360,
+        "wires": []
+    },
+    {
+        "id": "8d80a65693e21c0e",
+        "type": "function",
+        "z": "6806bff36aacc4c5",
+        "name": "Kiểm tra Ngưỡng",
+        "func": "let temp = global.get('temp') || 0;\nlet hum = global.get('hum') || 0;\nif(msg.topic === 'adminpc/tuoicay/nhietdo') { temp = parseFloat(msg.payload); global.set('temp', temp); }\nif(msg.topic === 'adminpc/tuoicay/doam') { hum = parseFloat(msg.payload); global.set('hum', hum); }\nif(temp > 35 || hum < 40) {\n    return { payload: `CẢNH BÁO: Nhiệt độ ${temp}°C, Độ ẩm ${hum}%. Vượt ngưỡng an toàn!`, topic: 'Cảnh báo Hệ thống Tưới' };\n}\nreturn { payload: 'Hệ thống đang hoạt động bình thường' };",
+        "outputs": 1,
+        "x": 680,
+        "y": 440,
+        "wires": [
+            [
+                "00ee4640c9c7e5c9",
+                "bc255e90e7dab25b",
+                "bc7d9583f03f76fc"
+            ]
+        ]
+    },
+    {
+        "id": "00ee4640c9c7e5c9",
+        "type": "ui_text",
+        "z": "6806bff36aacc4c5",
+        "group": "dash_group_1",
+        "order": 4,
+        "name": "Cảnh báo",
+        "label": "Thông báo:",
+        "format": "{{msg.payload}}",
+        "x": 910,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "bc255e90e7dab25b",
+        "type": "rbe",
+        "z": "6806bff36aacc4c5",
+        "name": "Chống Spam",
+        "func": "rbe",
+        "gap": "",
+        "start": "",
+        "inout": "out",
+        "septopics": true,
+        "property": "payload",
+        "topi": "topic",
+        "x": 920,
+        "y": 440,
+        "wires": [
+            [
+                "5b9cb0673fbb5e5a"
+            ]
+        ]
+    },
+    {
+        "id": "5b9cb0673fbb5e5a",
+        "type": "e-mail",
+        "z": "6806bff36aacc4c5",
+        "server": "smtp.gmail.com",
+        "port": "465",
+        "authtype": "BASIC",
+        "saslformat": false,
+        "token": "oauth2Response.access_token",
+        "secure": true,
+        "tls": false,
+        "name": "22T102507@husc.edu.vn",
+        "dname": "",
+        "x": 1140,
+        "y": 440,
+        "wires": []
+    },
+    {
+        "id": "bc7d9583f03f76fc",
+        "type": "switch",
+        "z": "6806bff36aacc4c5",
+        "name": "Lọc Cảnh Báo",
+        "property": "payload",
+        "rules": [
+            {
+                "t": "cont",
+                "v": "CẢNH BÁO",
+                "vt": "str"
+            }
+        ],
+        "outputs": 1,
+        "x": 920,
+        "y": 500,
+        "wires": [
+            [
+                "a1862af64e124074"
+            ]
+        ]
+    },
+    {
+        "id": "a1862af64e124074",
+        "type": "file in",
+        "z": "6806bff36aacc4c5",
+        "name": "Đọc File MP3",
+        "filename": "D:/bao_dong.mp3",
+        "filenameType": "str",
+        "format": "",
+        "allProps": false,
+        "x": 1130,
+        "y": 500,
+        "wires": [
+            [
+                "949343e6453d2bb3"
+            ]
+        ]
+    },
+    {
+        "id": "949343e6453d2bb3",
+        "type": "ui_audio",
+        "z": "6806bff36aacc4c5",
+        "name": "Phát Âm Thanh",
+        "group": "dash_group_1",
+        "x": 1350,
+        "y": 500,
+        "wires": []
+    },
+    {
+        "id": "376ed8da14c7b3c3",
+        "type": "mqtt in",
+        "z": "6806bff36aacc4c5",
+        "name": "Phản hồi Bơm",
+        "topic": "adminpc/tuoicay/trangthaibom",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "328e8059b356b807",
+        "nl": false,
+        "rap": false,
+        "inputs": 0,
+        "x": 450,
+        "y": 640,
+        "wires": [
+            [
+                "d64ff357c6deec04"
+            ]
+        ]
+    },
+    {
+        "id": "d64ff357c6deec04",
+        "type": "ui_text",
+        "z": "6806bff36aacc4c5",
+        "group": "dash_group_2",
+        "order": 3,
+        "label": "Bơm thực tế:",
+        "format": "{{msg.payload}}",
+        "x": 690,
+        "y": 640,
+        "wires": []
+    },
+    {
+        "id": "aa8f46c3a90b71f7",
+        "type": "ui_dropdown",
+        "z": "6806bff36aacc4c5",
+        "name": "Lệnh Bơm",
+        "label": "Gửi Lệnh Bơm",
+        "tooltip": "",
+        "place": "",
+        "group": "dash_group_2",
+        "width": "",
+        "height": "",
+        "passthru": true,
+        "multiple": false,
+        "options": [
+            {
+                "label": "BẬT (MANUAL)",
+                "value": "ON",
+                "type": "str"
+            },
+            {
+                "label": "TẮT (MANUAL)",
+                "value": "OFF",
+                "type": "str"
+            },
+            {
+                "label": "TỰ ĐỘNG (AUTO)",
+                "value": "AUTO",
+                "type": "str"
+            }
+        ],
+        "topic": "",
+        "topicType": "str",
+        "className": "",
+        "x": 440,
+        "y": 540,
+        "wires": [
+            [
+                "ce2829813d7fa5f8"
+            ]
+        ]
+    },
+    {
+        "id": "ce2829813d7fa5f8",
+        "type": "mqtt out",
+        "z": "6806bff36aacc4c5",
+        "name": "",
+        "topic": "adminpc/tuoicay/bom",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "328e8059b356b807",
+        "x": 690,
+        "y": 540,
+        "wires": []
+    },
+    {
+        "id": "328e8059b356b807",
+        "type": "mqtt-broker",
+        "name": "",
+        "broker": "broker.hivemq.com",
+        "port": 1883,
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": 4,
+        "keepalive": 60,
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "dash_group_1",
+        "type": "ui_group",
+        "name": "Giám Sát & Cảnh Báo",
+        "tab": "dash_tab_1",
+        "order": 1,
+        "disp": true,
+        "width": "6",
+        "collapse": false
+    },
+    {
+        "id": "dash_group_2",
+        "type": "ui_group",
+        "name": "Điều Khiển Thiết Bị",
+        "tab": "dash_tab_1",
+        "order": 2,
+        "disp": true,
+        "width": "6",
+        "collapse": false
+    },
+    {
+        "id": "dash_tab_1",
+        "type": "ui_tab",
+        "name": "Hệ Thống Tưới Cây",
+        "icon": "dashboard",
+        "disabled": false,
+        "hidden": false
+    },
+    {
+        "id": "f6c4c96abb3813a6",
+        "type": "global-config",
+        "env": [],
+        "modules": {
+            "node-red-dashboard": "3.6.6",
+            "node-red-node-email": "5.2.1"
+        }
+    }
+]
