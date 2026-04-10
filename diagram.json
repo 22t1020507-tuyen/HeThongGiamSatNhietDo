@@ -1,0 +1,34 @@
+{
+  "version": 1,
+  "editor": "wokwi",
+  "parts": [
+    { "type": "board-esp32-devkit-c-v4", "id": "esp1", "top": 310, "left": 160, "attrs": {} },
+    { "type": "wokwi-dht22", "id": "dht1", "top": 160, "left": 10, "attrs": {} },
+    { "type": "wokwi-potentiometer", "id": "pot1", "top": 190, "left": 310, "attrs": {} },
+    { "type": "wokwi-relay-module", "id": "relay1", "top": 430, "left": 310, "attrs": {} },
+    { "type": "wokwi-led", "id": "led1", "top": 510, "left": 60, "attrs": { "color": "red" } },
+    { "type": "wokwi-led", "id": "led2", "top": 410, "left": 60, "attrs": { "color": "yellow" } },
+    { "type": "wokwi-lcd1602", "id": "lcd1", "top": 60, "left": 210, "attrs": { "pins": "i2c" } }
+  ],
+  "connections": [
+    [ "esp1:3V3", "dht1:VCC", "red", [ "v0" ] ],
+    [ "esp1:14", "dht1:SDA", "green", [ "h0" ] ],
+    [ "esp1:GND.1", "dht1:GND", "black", [ "v0" ] ],
+    [ "esp1:3V3", "pot1:VCC", "red", [ "v0" ] ],
+    [ "esp1:34", "pot1:SIG", "yellow", [ "v0" ] ],
+    [ "esp1:GND.1", "pot1:GND", "black", [ "v0" ] ],
+    [ "esp1:3V3", "relay1:VCC", "red", [ "v0" ] ],
+    [ "esp1:2", "relay1:IN", "blue", [ "v0" ] ],
+    [ "esp1:GND.2", "relay1:GND", "black", [ "v0" ] ],
+    [ "esp1:3V3", "relay1:COM", "red", [ "v0" ] ],
+    [ "relay1:NO", "led1:A", "orange", [ "v10", "h-250" ] ],
+    [ "led1:C", "esp1:GND.2", "black", [ "v0" ] ],
+    [ "esp1:5", "led2:A", "purple", [ "h-50" ] ],
+    [ "led2:C", "esp1:GND.2", "black", [ "v0" ] ],
+    [ "esp1:5V", "lcd1:VCC", "red", [ "v0" ] ],
+    [ "esp1:GND.1", "lcd1:GND", "black", [ "v0" ] ],
+    [ "esp1:21", "lcd1:SDA", "purple", [ "v0" ] ],
+    [ "esp1:22", "lcd1:SCL", "cyan", [ "v0" ] ]
+  ],
+  "dependencies": {}
+}
