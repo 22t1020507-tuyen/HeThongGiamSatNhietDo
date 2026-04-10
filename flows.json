@@ -712,7 +712,7 @@
         "token": "oauth2Response.access_token",
         "secure": true,
         "tls": false,
-        "name": "22T1020507@husc.edu.vn",
+        "name": "lavannhattuyen@gmail.com",
         "dname": "",
         "x": 1150,
         "y": 440,
@@ -859,7 +859,7 @@
         "wires": []
     },
     {
-        "id": "718b267ecab24268",
+        "id": "3d189f3e637703c9",
         "type": "global-config",
         "env": [],
         "modules": {
